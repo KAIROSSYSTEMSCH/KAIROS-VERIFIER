@@ -1,0 +1,11 @@
+# Kairos Verifier — pinned to the exact versions used for the E1/E2/E3 columns
+# of EXPECTED_HASHES.md.
+#
+# The versions are only half the envelope. The other half is environment:
+#   OPENBLAS_CORETYPE=Haswell
+#   OMP_NUM_THREADS=1  MKL_NUM_THREADS=1  OPENBLAS_NUM_THREADS=1
+#   PYTHONHASHSEED=0
+# Without OPENBLAS_CORETYPE, L3 tracks your CPU and will not match. See README §5.
+numpy==2.2.6
+pandas==2.3.3
+xgboost==3.2.0
