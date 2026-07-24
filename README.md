@@ -21,7 +21,7 @@ Compare your output to ours. It takes about 3 minutes.
 ```bash
 # 1 — authenticate the script (it must be the one we measured)
 sha256sum determinism_ladder.py
-# expected: c8b518ff484d9940f7c2da05a2b5ac58fd8a1ebf1b3123b2136d5fb6a691ec66
+# expected: f23de8df0d216dc6d79d0402103dcb2bb5ed1132eee83f10bf698c2cbae6d75c
 
 # 2 — isolated environment, pinned versions
 python3 -m venv env
