@@ -117,7 +117,7 @@ if pd is not None:
 else:
     line("L5", "pandas groupby", "SKIPPED", "pandas absent")
 
-# ── L6 — ML : LA question V10 ─────────────────────────────────────────────────
+# ── L6 — apprentissage automatique, mono- puis multi-thread ──────────────────
 try:
     import xgboost as xgb
     X = rng.standard_normal((20_000, 20))
@@ -131,39 +131,35 @@ try:
         }
         bst = xgb.train(params, dtrain, num_boost_round=20)
         pred = bst.predict(dtrain)
-        tag = "mono-thread" if nthread == 1 else "<<< MULTI-THREAD : LA question V10"
+        tag = "mono-thread" if nthread == 1 else "<<< MULTI-THREAD"
         line("L6", f"xgboost nthread={nthread}", h(pred), tag)
 except ImportError:
-    line("L6", "xgboost", "ABSENT", "installer pour tester V10")
+    line("L6", "xgboost", "ABSENT", "installer xgboost pour ce niveau")
 
 print("-" * 78)
 print("""
 LECTURE DES RESULTATS
 ─────────────────────
-1. Comparer A vs B, meme passe :   diff ladder_A_constrained.txt ladder_B_constrained.txt
-2. Comparer contraint vs non :     diff ladder_A_unconstrained.txt ladder_A_constrained.txt
+1. Comparer deux environnements, meme passe :
+   diff ladder_env1_constrained.txt ladder_env2_constrained.txt
+2. Comparer contraint vs non contraint :
+   diff ladder_constrained.txt ladder_unconstrained.txt
 
 Le niveau ou la divergence apparait EST le resultat.
 
   L0 diverge          -> erreur de protocole, pas le systeme
-  L1-L2 divergent     -> inattendu. A investiguer serieusement.
+  L1-L2 divergent     -> inattendu. A investiguer.
   L3 diverge non-contraint mais passe contraint
-                      -> BLAS multi-thread. OMP_NUM_THREADS=1 est OBLIGATOIRE
-                         dans le runner. Ce n'est pas une option.
-  L4 diverge          -> NEP 50. Le pipeline ne doit jamais faire de casting
-                         mixte implicite. Verifier le code.
-  L5 diverge          -> pandas. Trier explicitement partout.
-  L6 nthread=0 diverge-> ATTENDU. C'est le probleme V10.
-     nthread=1 passe  -> le determinisme ML est ATTEIGNABLE, au prix du mono-thread.
-                         Cout : temps de calcul. Benefice : la these tient.
+                      -> BLAS multi-thread. OMP_NUM_THREADS=1 est un element
+                         constitutif de l'enveloppe, pas une option.
+  L4 diverge          -> NEP 50. Aucun casting mixte implicite ne doit subsister.
+  L5 diverge          -> pandas. Trier explicitement.
+  L6 nthread=0 diverge-> attendu hors enveloppe mono-thread.
+     nthread=1 passe  -> le determinisme est atteignable au prix du mono-thread.
+                         Cout : temps de calcul.
 
-CE QU'IL FAUT ESPERER
-─────────────────────
-Que L6 nthread=1 passe et L6 nthread=0 casse. Cela signifie :
-  - le determinisme ML est possible
-  - il a un prix (mono-thread)
-  - vous savez exactement lequel, avant aout, avant d'ecrire une ligne de V10
-
-Si L6 nthread=1 casse aussi : le probleme est plus profond. Mieux vaut le savoir
-maintenant que d'y arriver en aout avec une promesse deja publiee.
+PORTEE
+──────
+Ce script mesure. Il ne conclut pas. Le resultat obtenu sur votre environnement
+prevaut sur toute empreinte publiee ailleurs.
 """)
